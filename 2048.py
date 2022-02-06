@@ -1,6 +1,7 @@
 import os
 import random
 import keyboard
+import json
 score=[0]
 peak=2048
 def display(mat,n):
@@ -20,7 +21,17 @@ def display(mat,n):
             else:
                 print(mat[i][j],end=' '*(6-len(str(mat[i][j]))))
         print('\n')
-    print('SCORE is:',score[0])
+    try:
+        highscore=json.load(open('highscore.json'))
+    except:
+        f=open('highscore.json','w')
+        json.dump(0,f)
+        highscore=0
+    if score[0]>highscore:
+        highscore=score[0]
+        with open("highscore.json", "w") as write_file:
+            json.dump(score[0], write_file)
+    print('SCORE is:',score[0],'HighScore is:',highscore)
     if win:
         restart('win')
     if flag:
