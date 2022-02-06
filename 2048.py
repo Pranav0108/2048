@@ -4,7 +4,7 @@ import keyboard
 score=[0]
 peak=2048
 def display(mat,n):
-    global peak
+    global peak,score
     os.system('cls')
     print(' *****2048****')
     flag=True
@@ -29,7 +29,7 @@ def display(mat,n):
 def check_game_over(mat,n):
     temp=[[mat[i][j] for j in range(n)]for i in range(n)]
     # print('game over called')
-    if(left(temp,n)==False and right(temp,n)==False and top(temp,n)==False and down(temp,n)==False):
+    if(left(temp,n,check=True)==False and right(temp,n,check=True)==False and top(temp,n,check=True)==False and down(temp,n,check=True)==False):
         restart('loose')
 def restart(param):
     if param=='loose':
@@ -40,10 +40,7 @@ def restart(param):
     ip=input()
     if ip=='n':
         exit()
-    global mat
-    mat=[[0,0,0,0]for i in range(4)]
-    print(mat)
-    randnum(mat,4)
+    os.system('python 2048.py')
 
 
 def randnum(mat,n):
@@ -61,7 +58,7 @@ def randnum(mat,n):
         mat[row][col]=random.choice([2,4])
     display(mat,n)
 
-def left(mat,n):
+def left(mat,n,check=False):
     global score
     changes=False
     for row in range(n):
@@ -72,7 +69,8 @@ def left(mat,n):
                 if mat[row][c1]==mat[row][c2] and mat[row][c1]!=0:
                     mat[row][c1]*=2
                     mat[row][c2]=0
-                    score[0]+=mat[row][c1]
+                    if not check:
+                        score[0]+=mat[row][c1]
                     changes=True
                     break
                 elif mat[row][c1]==0 and mat[row][c2]!=0:
@@ -80,7 +78,7 @@ def left(mat,n):
                     mat[row][c2]=0
                     changes=True
     return changes
-def top(mat,n):
+def top(mat,n,check=False):
     global score
     changes=False
     for col in range(n):
@@ -91,7 +89,8 @@ def top(mat,n):
                 if mat[r1][col]==mat[r2][col] and mat[r2][col]!=0:
                     mat[r1][col]*=2
                     mat[r2][col]=0
-                    score[0]+=mat[r1][col]
+                    if not check:
+                        score[0]+=mat[r1][col]
                     changes=True
                     break
                 elif mat[r1][col]==0 and mat[r2][col]!=0:
@@ -99,7 +98,7 @@ def top(mat,n):
                     mat[r2][col]=0
                     changes=True
     return changes
-def down(mat,n):
+def down(mat,n,check=False):
     global score
     changes=False
     for col in range(n):
@@ -110,7 +109,8 @@ def down(mat,n):
                 if mat[r1][col]==mat[r2][col] and mat[r2][col]!=0:
                     mat[r1][col]*=2
                     mat[r2][col]=0
-                    score[0]+=mat[r1][col]
+                    if not check:
+                        score[0]+=mat[r1][col]
                     changes=True
                     break
                 elif mat[r1][col]==0 and mat[r2][col]!=0:
@@ -118,7 +118,7 @@ def down(mat,n):
                     mat[r2][col]=0
                     changes=True
     return changes
-def right(mat,n):
+def right(mat,n,check=False):
     global score
     changes=False
     for row in range(n):
@@ -129,7 +129,8 @@ def right(mat,n):
                 if mat[row][c1]==mat[row][c2] and mat[row][c1]!=0:
                     mat[row][c1]*=2
                     mat[row][c2]=0
-                    score[0]+=mat[row][c1]
+                    if not check:
+                        score[0]+=mat[row][c1]
                     changes=True
                     break
                 elif mat[row][c1]==0 and mat[row][c2]!=0:
@@ -138,17 +139,22 @@ def right(mat,n):
                     changes=True
     return changes
 
-if __name__=='__main__':
+def main():
     n=4
+    global score
+    score[0]=0
     mat1=[[0 for i in range(n)]for j in range(n)]
+    # mat1=[[1,2,3,4],[4,3,2,1],[1,2,3,4],[4,3,2,1]]
     randnum(mat1,n)
     randnum(mat1,n)
     keyboard.add_hotkey('up',lambda: (top(mat1,n),randnum(mat1,n)) )
     keyboard.add_hotkey('down',lambda: (down(mat1,n),randnum(mat1,n)))
     keyboard.add_hotkey('left',lambda: (left(mat1,n),randnum(mat1,n)))
     keyboard.add_hotkey('right',lambda: (right(mat1,n),randnum(mat1,n)))
-    keyboard.add_hotkey('3',lambda: (top(mat1,n),randnum(mat1,n)) )
-    keyboard.add_hotkey('4',lambda: (down(mat1,n),randnum(mat1,n)))
-    keyboard.add_hotkey('1',lambda: (left(mat1,n),randnum(mat1,n)))
-    keyboard.add_hotkey('2',lambda: (right(mat1,n),randnum(mat1,n)))
+    # keyboard.add_hotkey('3',lambda: (top(mat1,n),randnum(mat1,n)) )
+    # keyboard.add_hotkey('4',lambda: (down(mat1,n),randnum(mat1,n)))
+    # keyboard.add_hotkey('1',lambda: (left(mat1,n),randnum(mat1,n)))
+    # keyboard.add_hotkey('2',lambda: (right(mat1,n),randnum(mat1,n)))
     keyboard.wait('space')
+if __name__=='__main__':
+    main()
